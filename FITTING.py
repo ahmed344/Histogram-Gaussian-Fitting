@@ -4,8 +4,35 @@ from scipy.optimize import curve_fit
 
 
 class Fit_Gaussian():
+    """
+    A class used to fit a gaussian on a histogram
+
+    ...
+
+    Attributes
+    ----------
+    data : array like
+        input data. The histogram is computed over the flattened array.
+
+    normalized : bool
+        fit a normalized histogram, the default is false.
+
+    Methods
+    -------
+    hist_fitting(show = False)
+        Get a gaussian fitting of a histogram.
+    """
     
     def __init__(self, data, normalized = False):
+        """
+        Parameters
+        ----------
+        data : array like
+            input data. The histogram is computed over the flattened array.
+
+        normalized : bool
+            fit a normalized histogram, the default is false.
+        """
         
         self.data = data                     # The image to the Gaussian on.
         self.normalized = normalized       # Using normalized Gaussian. 
@@ -21,12 +48,31 @@ class Fit_Gaussian():
     # Fit a gaussian on a histogram
     def hist_fitting(self, bins = 200, show = False):
         """Get a gaussian fitting of a histogram.
-        Parameter:
-            data - as numpy array
-        Returns: 
-            X0, sigma, Y0, A - of the histogram gaussian
-            or
-            X0, sigma - of the normalized histogram gaussian
+        
+        Parameters
+        ----------
+        bins : int, optional
+        It defines the number of equal-width bins in the given range (200, by default).
+        
+        show : bool, optional
+        Show the graph of the histogram, the default is false.
+        
+        Returns
+        ------- 
+        popt: array
+        Optimal values for the parameters so that the sum of the squared residuals of the Gaussian with data is minimized
+        
+        X0, sigma, Y0, A of the histogram gaussian
+        X0, sigma of the normalized histogram gaussian if normalized = True
+
+        Raises
+        ------
+        Value Error
+            if either ydata or xdata contain NaNs, or if incompatible options are used.
+        Runtime Error
+            if the least-squares minimization fails.
+        Optimize Warning
+            if covariance of the parameters can not be estimated.
         """
         # Make a histogram
         if self.normalized == True:
